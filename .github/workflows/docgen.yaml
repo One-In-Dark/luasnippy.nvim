@@ -23,12 +23,12 @@ jobs:
           description: A more ergonomic snippet facility wrapping LuaSnip
           demojify: true
           dedupsubheadings: false
-      - uses: dtolnay/rust-toolchain@stable
-      - run: cargo install vimcats --features=cli
-      - run: vimcats lua/luasnippy.lua >> doc/${{ github.event.repository.name }}.txt
+      # - uses: dtolnay/rust-toolchain@stable
+      # - run: cargo install vimcats --features=cli
+      # - run: vimcats lua/luasnippy.lua >> doc/${{ github.event.repository.name }}.txt
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "chore(docs): auto-generate vimdoc"
+          commit_message: "docs: auto-generate vimdoc"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"

@@ -94,3 +94,5 @@ local packsnip = require("luasnippy").pack_snippets
 
 Now enjoy the power of snippets!
 
+Last note: as for API reference, I am struggling to find a good documentation generator that supports exporting functions by `return`-ing at the end of the file (which excludes vimCATS). If you have any suggestion, please let me know. Thanks!
+
