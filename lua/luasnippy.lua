@@ -83,10 +83,9 @@ local function snippy(context, trigger, body_str, body_elems, opts)
 end
 
 ---Works the same way as `snippy`, with delimiters set to angular brackets "<>". It to `snippy` is what `fmta` to `fmt`, see `:h luasnip-extras-fmt`.
-local function snippy_angular(context, trigger, body_str, body_elems, extra)
-   extra = extra or {}
-   extra.delimiters = "<>"
-   return snippy(context, trigger, body_str, body_elems, extra)
+local function snippy_angular(context, trigger, body_str, body_elems, opts)
+   opts = opts or {}; opts.delimiters = "<>"
+   return snippy(context, trigger, body_str, body_elems, opts)
 end
 
 ---@param cond table|function A function, or a condition object (see `CONDITION OBJECTS` in `:h luasnip-extras-conditions`).
