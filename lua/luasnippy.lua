@@ -3,8 +3,10 @@ local fmt = require("luasnip.extras.fmt").fmt
 local conditions = require("luasnip.extras.conditions")
 local conditionsExpand = require("luasnip.extras.conditions.expand")
 
+local luasnippy = {}
+
 ---@return fun(_, parent): any # a function that extracts the capture with the given index from the parent snippet, for use in function node.
-local function capture_extract(indice)
+function luasnippy.capture_extract(indice)
    return function (_, parent)
       return parent.snippet.captures[indice]
    end
@@ -29,12 +31,12 @@ local function parse_context(context, baseset)
    end
    if context:match("b") then
       context_tbl.condition = context_tbl.condition
-          and context_tbl.condition + conditionsExpand.line_begin
+          and context_tbl.condition * conditionsExpand.line_begin
           or conditionsExpand.line_begin
    end
    if context:match("Ce") then
       context_tbl.condition = context_tbl.condition
-          and context_tbl.condition + conditionsExpand.line_end
+          and context_tbl.condition * conditionsExpand.line_end
           or conditionsExpand.line_end
    end
 
@@ -66,7 +68,7 @@ end
 ---@param body_elems any|nil The body elements of the snippet, as in `fmt` (see `nodes` in `:h luasnip-extras-fmt`)
 ---@param opts table|nil Passed to `fmt` as the third argument (see `opts` in `:h luasnip-extras-fmt`)
 ---@return SnippetTuple # The snippet tuple with the given context, trigger, and body elements
-local function snippy(context, trigger, body_str, body_elems, opts)
+function luasnippy.snippy(context, trigger, body_str, body_elems, opts)
    local context_tbl
    if type(context) == "table" then
       if context[1] then
@@ -83,15 +85,15 @@ local function snippy(context, trigger, body_str, body_elems, opts)
 end
 
 ---Works the same way as `snippy`, with delimiters set to angular brackets "<>". It to `snippy` is what `fmta` to `fmt`, see `:h luasnip-extras-fmt`.
-local function snippy_angular(context, trigger, body_str, body_elems, opts)
+function luasnippy.snippy_angular(context, trigger, body_str, body_elems, opts)
    opts = opts or {}; opts.delimiters = "<>"
-   return snippy(context, trigger, body_str, body_elems, opts)
+   return luasnippy.snippy(context, trigger, body_str, body_elems, opts)
 end
 
 ---@param cond table|function A function, or a condition object (see `CONDITION OBJECTS` in `:h luasnip-extras-conditions`).
 ---@param snippets (SnippetTuple|SnippetTuple[])[]
 ---@return SnippetTuple[] # The snippets that respects the condition
-local function conditional_by(cond, snippets)
+function luasnippy.conditional_by(cond, snippets)
    if type(cond) == "function" then
       cond = conditions.make_condition(cond)
    elseif type(cond) ~= "table" then
@@ -115,7 +117,7 @@ end
 ---Accepts a list of LuaSnippy snippets and converts them to LuaSnip snippets, for use in snippet file `return` (see `:h luasnip-loaders-lua`) or `luasnip.add_snippets` (see `:h luasnip-api`).
 ---@param snippetTuples (SnippetTuple|SnippetTuple[])[]
 ---@return any # list of LuaSnip snippets
-local function pack_snippets(snippetTuples)
+function luasnippy.pack_snippets(snippetTuples)
    local snippets = {}
    for _, snipgrp in ipairs(snippetTuples) do
       if snipgrp._snip then
@@ -130,10 +132,4 @@ local function pack_snippets(snippetTuples)
    return snippets
 end
 
-return {
-   snippy = snippy,
-   snippy_angular = snippy_angular,
-   conditional_by = conditional_by,
-   capture_extract = capture_extract,
-   pack_snippets = pack_snippets,
-}
+return luasnippy
