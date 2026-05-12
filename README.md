@@ -32,7 +32,15 @@ return pack_snippets {
 
 You can use any of the plugin manager, or `git clone` this repo and add it to your `'rtp'`. For example, install by *lazy.nvim*:
 
-TODO.
+```lua
+{
+   "One-In-Dark/luasnippy.nvim",
+   dependencies = { "L3MON4D3/LuaSnip" },
+   config = function(_, _)
+      require("luasnip.loaders.from_lua").lazy_load()
+   end
+},
+```
 
 # Usage
 
