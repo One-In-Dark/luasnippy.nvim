@@ -1,9 +1,15 @@
 local luasnip = require("luasnip")
-local fmta = require("luasnip.extras.fmt").fmta
 local extras = require("luasnip.extras")
+local fmta = require("luasnip.extras.fmt").fmta
 local luasnippy = require("luasnippy")
 
 local api = vim.api
+
+local cnode = luasnip.choice_node
+local f = luasnip.function_node
+local i = luasnip.insert_node
+local sn = luasnip.snippet_node
+local tnode = luasnip.text_node
 
 local snpt = luasnippy.snpt
 local snpta = luasnippy.snpta
@@ -12,14 +18,7 @@ local pack_snippets = luasnippy.pack_snippets
 local capture_extract = luasnippy.capture_extract
 local make_condition = luasnippy.make_condition
 
-local tnode = luasnip.text_node
-local i = luasnip.insert_node
-local f = luasnip.function_node
-local cnode = luasnip.choice_node
-local sn = luasnip.snippet_node
-
 local capturee1 = capture_extract(1)
-local capturee2 = capture_extract(2)
 local MAX_SEARCH_LINES = 100
 
 local function is_in_math()
@@ -69,7 +68,8 @@ return pack_snippets {
       ]==],
       {
          i(1),
-         cnode(2, { tnode("{}{}"),
+         cnode(2, {
+            tnode("{}{}"),
             sn(nil, fmta("{<>}{<>}", { i(1), i(2, "label") })),
             sn(nil, fmta("{<>}{}", { i(1, "name") })),
          }),
@@ -129,18 +129,7 @@ return pack_snippets {
       }),
    }),
    context(is_in_math_cond, {
-      snpt([=[\([a-zA-Z\u0370-\u03ff]\)\(\d\)]=], "Rv iA",
-         "{}_{}", { f(capturee1), f(capturee2) }),
-      snpta([=[\([a-zA-Z\u0370-\u03ff]\)_\(\d\d\)]=], "Rv iA",
-         "<>_{<>}", { f(capturee1), f(capturee2) }),
-      snpt("(%S)sr", "irA",
-         "{}^2", { f(capturee1) }),
-      snpt("(%S)%^2(%d)", "irA",
-         "{}^{}", { f(capturee1), f(capturee2) }),
-      snpta("//", "iA P500",
-         "\\frac{<>}{<>}", { i(1), i(2) }),
-      snpta([=[\(\d\+\|\d*\%(\%(\\\)\?\a\+\|[\u0370-\u03ff]\)\)/]=], "Rv A",
-         "\\frac{<>}{<>}", { f(capturee1), i(1) }),
+      require("luasnippy.math_snippets"),
 
       snpta([=[\([a-zA-Z\u0370-\u03ff]\)bar]=], "iARv",
          "\\bar{<>}", { f(capturee1) }),
@@ -178,7 +167,7 @@ return pack_snippets {
 
       snpta("mrm", "iA",
          "\\mathrm{<>}", { i(1) }),
-      snpta([[\C\%(\\sub\|\\over\|\\sup\|\\\)\@10<!set]], "iARv",
+      snpta([[\C\%(\\sub\|\\over\|\\sup\|\\\)\@10<!set]], "iA Rv",
          [[\{<>\}]], { i(1) }),
       snpta("bin", "i",
          "\\binom{<>}{<>}", { i(1), i(2) }),

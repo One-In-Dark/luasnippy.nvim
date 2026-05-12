@@ -1,6 +1,6 @@
 # luasnippy.nvim
 
-A more ergonomic snippet facility wrapping LuaSnip
+A more ergonomic snippet facility wrapping LuaSnip, with tex and Markdown snippets.
 
 # Rationale
 
