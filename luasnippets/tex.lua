@@ -129,7 +129,7 @@ return pack_snippets {
       }),
    }),
    context(is_in_math_cond, {
-      require("luasnippy.math_snippets"),
+      luasnippy.math_snippets(),
 
       snpta([=[\([a-zA-Z\u0370-\u03ff]\)bar]=], "iARv",
          "\\bar{<>}", { f(capturee1) }),

@@ -179,6 +179,31 @@ function luasnippy.pack_snippets(snippet_tuples)
    return snippets
 end
 
+---@return SnippetTuple[]
+function luasnippy.math_snippets()
+   local f = luasnip.function_node
+   local i = luasnip.insert_node
+   local snpt = luasnippy.snpt
+   local snpta = luasnippy.snpta
+   local capture_extract = luasnippy.capture_extract
+   local capturee1 = capture_extract(1)
+   local capturee2 = capture_extract(2)
+   return {
+      snpt([=[\([a-zA-Z\u0370-\u03ff]\)\(\d\)]=], "Rv iA",
+         "{}_{}", { f(capturee1), f(capturee2) }),
+      snpta([=[\([a-zA-Z\u0370-\u03ff]\)_\(\d\d\)]=], "Rv iA",
+         "<>_{<>}", { f(capturee1), f(capturee2) }),
+      snpt("(%S)sr", "irA",
+         "{}^2", { f(capturee1) }),
+      snpt("(%S)%^2(%d)", "irA",
+         "{}^{}", { f(capturee1), f(capturee2) }),
+      snpta("//", "iA P500",
+         "\\frac{<>}{<>}", { i(1), i(2) }),
+      snpta([=[\(\d\+\|\d*\%(\%(\\\)\?\a\+\|[\u0370-\u03ff]\)\)/]=], "Rv A",
+         "\\frac{<>}{<>}", { f(capturee1), i(1) }),
+   }
+end
+
 luasnippy.make_condition = conditions.make_condition
 
 return luasnippy
