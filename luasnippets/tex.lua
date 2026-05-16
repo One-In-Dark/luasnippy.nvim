@@ -54,8 +54,9 @@ end
 ---@param lineno 0-based line index
 local function get_endchar_of_line(lineno)
    local line_offset = api.nvim_buf_get_offset(0, lineno + 1)
-   local offset = line_offset - 2 -- strip EOL
-   local args = {0, lineno, offset, lineno, offset + 1, {}}
+   local last_line_offset = api.nvim_buf_get_offset(0, lineno)
+   local line_len = line_offset - last_line_offset - 1 -- no EOL
+   local args = {0, lineno, line_len - 1, lineno, line_len, {}}
    local lastline = api.nvim_buf_get_text(unpack(args))[1]
    return lastline
 end
@@ -63,7 +64,7 @@ end
 return pack_snippets {
    snpta("beg", "b Ce A", [==[
       \begin{<>}<>
-        <>
+      	<>
       \end{<>}
       ]==],
       {
@@ -82,7 +83,7 @@ return pack_snippets {
    context(-is_in_math_cond, {
       snpt("dm", "b Ce A", [=[
          \[
-           {}
+         	{}
          {}\]
          ]=],
          {
@@ -99,24 +100,24 @@ return pack_snippets {
       snpta("ep", "", "\\emph{<>}", { i(1) }),
       snpta("enum", "b Ce A", [[
          \begin{enumerate}<>
-           \item <>
+         	\item <>
          \end{enumerate}
          ]], { i(1), i(0) }),
       snpta("item", "b Ce A", [[
          \begin{itemize}
-           \item <>
+         	\item <>
          \end{itemize}
          ]], { i(0) }),
       snpta("desc", "b Ce A", [[
          \begin{description}
-           \item [<>] <>
+         	\item [<>] <>
          \end{description}
          ]], { i(1), i(0) }),
       snpta("fig", "b Ce A", [[
          \begin{figure}[hbp]
-           \centering
-           <>
-           \caption{<>}\label{fig:<>}
+         	\centering
+         	<>
+         	\caption{<>}\label{fig:<>}
          \end{figure}
          ]], { i(0), i(1), i(2) }),
       context(function()
@@ -171,6 +172,12 @@ return pack_snippets {
          [[\{<>\}]], { i(1) }),
       snpta("bin", "i",
          "\\binom{<>}{<>}", { i(1), i(2) }),
+
+      snpta("array", "b Ce A", [[
+         \begin{array}{<>}
+         	<>
+         \end{array}
+         ]], { i(1), i(0) }),
 
       snpta("__", {"iA", desc = "Copy subscript"}, "_{<><>}", {
          f(function()
@@ -233,12 +240,6 @@ return pack_snippets {
          end),
          i(1)
       }),
-
-      snpta("array", "b Ce A", [[
-         \begin{array}{<>}
-           <>
-         \end{array}
-         ]], { i(1), i(0) }),
    }),
 }
 

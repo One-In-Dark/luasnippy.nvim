@@ -1,8 +1,12 @@
+local luasnip = require("luasnip")
 local luasnippy = require("luasnippy")
 
-local snpt = luasnippy.snpt
+local i = luasnip.insert_node
+
 local context = luasnippy.context
+local make_condition = luasnippy.make_condition
 local pack_snippets = luasnippy.pack_snippets
+local snpt = luasnippy.snpt
 
 local function is_in_math()
    local node = vim.treesitter.get_node({
@@ -13,6 +17,7 @@ local function is_in_math()
       "latex_block", "latex_span_delimiter",
    }, node:type())
 end
+local is_in_math_cond = make_condition(is_in_math)
 
 local Unicode_snippets = (function(command_map)
    local snippets = {}
@@ -41,10 +46,14 @@ end)({
 })
 
 return pack_snippets {
-   context(is_in_math, {
+   context(-is_in_math_cond, {
+      snpt("mk", "A", "${}$", { i(1) }),
+      snpt("dm", "A", "$$\n\t{}\n$$", { i(1) }),
+   }),
+   context(is_in_math_cond, {
       luasnippy.math_snippets(),
       Unicode_snippets,
       snpt("-> ", "iA", "→", {}),
       snpt("<- ", "iA", "←", {}),
-   })
+   }),
 }

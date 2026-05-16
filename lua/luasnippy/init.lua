@@ -75,17 +75,13 @@ end
 ---@field [4] table Table to be passed to `fmt`
 ---@field _snip boolean Set for all `SnippetTuple` instance
 
----Creates a LuaSnippy snippet tuple, supporting the following short-handed option syntax:
----- `r` for Lua pattern, `Rv` for vim regex, `Re` for ECMAscript regex,
----- `i` for in-word, `b` for beginning-of-line, `Ce` for endding-of-line,
----- `A` for autosnippet, `P<num>` for priority `<num>`.
----Any other character combination raise a warning.
----@param context table|string The context of the snippet (see `context` in `:h luasnip-snippets`), additionally supporting short-handed option syntax described above, either as a single string or as the field `[1]` of the table.
+---Creates a LuaSnippy snippet tuple.
+---@param context table|string
 ---@param trigger string
----@param body_str string The contents of the snippet, as in `fmt` (see `format` in `:h luasnip-extras-fmt`)
----@param body_elems any|nil The body elements of the snippet, as in `fmt` (see `nodes` in `:h luasnip-extras-fmt`)
----@param opts table|nil Passed to `fmt` as the third argument (see `opts` in `:h luasnip-extras-fmt`)
----@return SnippetTuple # The snippet tuple with the given context, trigger, and body elements
+---@param body_str string
+---@param body_elems any|nil
+---@param opts table|nil
+---@return SnippetTuple
 local function snippet_tuple(context, trigger, body_str, body_elems, opts)
    local context_tbl
    if type(context) == "table" then
@@ -109,12 +105,16 @@ end
 ---
 ---This is the main "snippet constructor" for the public API.
 ---
----Order of arguments: trigger first, then context.
+---Supports the following short-handed option syntax:
+---- `r` for Lua pattern, `Rv` for vim regex, `Re` for ECMAscript regex,
+---- `i` for in-word, `b` for beginning-of-line, `Ce` for endding-of-line,
+---- `A` for autosnippet, `P<num>` for priority `<num>`.
+---Any other character combination raises a warning.
 ---@param trigger string
----@param context table|string See `snippet_tuple` for supported forms.
----@param body_str string
----@param body_elems any
----@param opts table|nil
+---@param context table|string The context of the snippet (see `context` in `:h luasnip-snippets`), additionally supporting short-handed option syntax described above, either as a single string or as the field `[1]` of the table.
+---@param body_str string The contents of the snippet, as in `fmt` (see `format` in `:h luasnip-extras-fmt`)
+---@param body_elems any The body elements of the snippet, as in `fmt` (see `nodes` in `:h luasnip-extras-fmt`)
+---@param opts table|nil Passed to `fmt` as the third argument (see `opts` in `:h luasnip-extras-fmt`)
 ---@return SnippetTuple
 function luasnippy.snpt(trigger, context, body_str, body_elems, opts)
    return snippet_tuple(context, trigger, body_str, body_elems, opts)
