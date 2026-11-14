@@ -1,6 +1,6 @@
 # luasnippy.nvim
 
-A more ergonomic snippet facility wrapping LuaSnip, with tex and Markdown snippets.
+A more ergonomic snippet facility wrapping LuaSnip, with TeX and Markdown snippets.
 
 # Rationale
 
@@ -66,7 +66,7 @@ Normally the second argument of `snpt` is a string, with a similar syntax to Ult
   + `A` stands for auto-expansion;
   + `P<num>` sets the priority to `<num>` (see `priority` in `:h luasnip-snippets`).
 
-The first argument is the trigger word. The last two arguments form a f-string in Python (for those who are unfamiliar, it’s like string interpolation in shell), as is illustrated by the example above.
+The first argument is the trigger word. The last two arguments form a f-string in Python — for those who are unfamiliar, it’s like string interpolation in shell — as is illustrated by the example above.
 
 The last argument can further regulate the behaviour of the string formatting, see `opts` in `:h luasnip-extras-fmt`.
 

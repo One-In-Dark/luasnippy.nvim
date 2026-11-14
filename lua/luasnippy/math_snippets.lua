@@ -12,7 +12,7 @@ local capturee1 = capture_extract(1)
 local capturee2 = capture_extract(2)
 
 ---@module "luasnippy"
----@type SnippetTuple[]
+---@type luasnippy.SnippetTuple[]
 return {
    snpt([=[\([a-zA-Z\u0370-\u03ff]\)\(\d\)]=], "Rv iA",
       "{}_{}", { f(capturee1), f(capturee2) }),

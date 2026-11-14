@@ -68,7 +68,7 @@ local function parse_context(context, baseset)
    return context_tbl
 end
 
----@class (exact) SnippetTuple
+---@class (exact) luasnippy.SnippetTuple
 ---@field [1] table The context of the snippet
 ---@field [2] string Contents of the snippet as in `fmt`
 ---@field [3] any The body elements of the snippet
@@ -81,7 +81,7 @@ end
 ---@param body_str string
 ---@param body_elems any|nil
 ---@param opts table|nil
----@return SnippetTuple
+---@return luasnippy.SnippetTuple
 local function snippet_tuple(context, trigger, body_str, body_elems, opts)
    local context_tbl
    if type(context) == "table" then
@@ -115,7 +115,7 @@ end
 ---@param body_str string The contents of the snippet, as in `fmt` (see `format` in `:h luasnip-extras-fmt`)
 ---@param body_elems any The body elements of the snippet, as in `fmt` (see `nodes` in `:h luasnip-extras-fmt`)
 ---@param opts table|nil Passed to `fmt` as the third argument (see `opts` in `:h luasnip-extras-fmt`)
----@return SnippetTuple
+---@return luasnippy.SnippetTuple
 function luasnippy.snpt(trigger, context, body_str, body_elems, opts)
    return snippet_tuple(context, trigger, body_str, body_elems, opts)
 end
@@ -127,7 +127,7 @@ end
 ---@param body_str string
 ---@param body_elems any|nil
 ---@param opts table|nil
----@return SnippetTuple
+---@return luasnippy.SnippetTuple
 function luasnippy.snpta(trigger, context, body_str, body_elems, opts)
    opts = vim.tbl_deep_extend("force", opts or {}, {
       delimiters = "<>",
@@ -136,8 +136,8 @@ function luasnippy.snpta(trigger, context, body_str, body_elems, opts)
 end
 
 ---@param cond table|function A function, or a condition object (see `CONDITION OBJECTS` in `:h luasnip-extras-conditions`).
----@param snippets (SnippetTuple|SnippetTuple[])[]
----@return SnippetTuple[] # The snippets that respects the condition
+---@param snippets (luasnippy.SnippetTuple|luasnippy.SnippetTuple[])[]
+---@return luasnippy.SnippetTuple[] # The snippets that respects the condition
 function luasnippy.context(cond, snippets)
    if type(cond) == "function" then
       cond = conditions.make_condition(cond)
@@ -149,7 +149,7 @@ function luasnippy.context(cond, snippets)
       if snipgrp._snip then
          snipgrp = { snipgrp } -- singleton list
       end
-      ---@cast snipgrp SnippetTuple[]
+      ---@cast snipgrp luasnippy.SnippetTuple[]
       for _, snip in ipairs(snipgrp) do
          assert(snip._snip, "Non-snippet passed to context")
          snip[1].condition = snip[1].condition
@@ -161,7 +161,7 @@ function luasnippy.context(cond, snippets)
 end
 
 ---Accepts a list of LuaSnippy snippets and converts them to LuaSnip snippets, for use in snippet file `return` (see `:h luasnip-loaders-lua`) or `luasnip.add_snippets` (see `:h luasnip-api`).
----@param snippet_tuples (SnippetTuple|SnippetTuple[])[]
+---@param snippet_tuples (luasnippy.SnippetTuple|luasnippy.SnippetTuple[])[]
 ---@return any # list of LuaSnip snippets
 function luasnippy.pack_snippets(snippet_tuples)
    local snippets = {}
@@ -169,7 +169,7 @@ function luasnippy.pack_snippets(snippet_tuples)
       if snipgrp._snip then
          snipgrp = { snipgrp } -- singleton list
       end
-      ---@cast snipgrp SnippetTuple[]
+      ---@cast snipgrp luasnippy.SnippetTuple[]
       for _, snip in ipairs(snipgrp) do
          assert(snip._snip, "Non-snippet passed to pack_snippets")
          snip = luasnip.snippet(snip[1], fmt(snip[2], snip[3], snip[4]))
@@ -179,7 +179,7 @@ function luasnippy.pack_snippets(snippet_tuples)
    return snippets
 end
 
----@return SnippetTuple[]
+---@return luasnippy.SnippetTuple[]
 function luasnippy.math_snippets()
    local f = luasnip.function_node
    local i = luasnip.insert_node
@@ -201,6 +201,7 @@ function luasnippy.math_snippets()
          "\\frac{<>}{<>}", { i(1), i(2) }),
       snpta([=[\(\d\+\|\d*\%(\%(\\\)\?\a\+\|[\u0370-\u03ff]\)\)/]=], "Rv A",
          "\\frac{<>}{<>}", { f(capturee1), i(1) }),
+      snpta("txt", "iA", "\\text{<>}", { i(1) }),
    }
 end
 

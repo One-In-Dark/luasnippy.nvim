@@ -81,6 +81,10 @@ return pack_snippets {
       \includegraphics[width=<>\textwidth]{<>}
       ]], { i(1), i(2) }),
    context(-is_in_math_cond, {
+      snpta("ep", "", "\\emph{<>}", { i(1) }),
+      snpta("nrf", "", "\\nameref{<>}", { i(1) }),
+      snpta("idx", "", "\\index{<>}", { i(1) }),
+
       snpt("dm", "b Ce A", [=[
          \[
          	{}
@@ -97,7 +101,6 @@ return pack_snippets {
          }),
       snpt("mk", "A", "${}$", { i(1) }),
       snpt("cd", "A", [[\verb"{}"]], { i(1) }),
-      snpta("ep", "", "\\emph{<>}", { i(1) }),
       snpta("enum", "b Ce A", [[
          \begin{enumerate}<>
          	\item <>
